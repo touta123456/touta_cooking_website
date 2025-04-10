@@ -19,12 +19,12 @@ class WebSecurityConfigTest {
     @Test
     void whenAccessingPublicEndpoint_thenPermitAll() throws Exception {
         mockMvc.perform(get("/api/public/ping"))
-               .andExpect(status().isOk()); // suppose que "/" est accessible
+               .andExpect(status().isOk());
     }
 
     @Test
     void whenAccessingProtectedEndpointWithoutAuth_thenUnauthorized() throws Exception {
         mockMvc.perform(get("/api/recipes/all"))
-               .andExpect(status().isUnauthorized()); // doit matcher une route protégée
+               .andExpect(status().isUnauthorized()); // must match a protected path
     }
 }

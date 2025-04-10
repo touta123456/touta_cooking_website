@@ -22,12 +22,12 @@ class InitializerTest {
 
     @Test
     void initializer_shouldCreateAdminUserAndRoles() {
-        // Vérifie que les rôles ont bien été créés
+        // Check roles has been created
         assertThat(roleService.findAll())
             .extracting("libelle")
             .contains(RoleEnum.ADMIN.getLibelle(), RoleEnum.CHEF.getLibelle(), RoleEnum.USER.getLibelle());
 
-        // Vérifie que l'utilisateur admin a bien été créé
+        // Check the admin user has been created
         User admin = userService.findByEmail("admin@touta_cooking_website.com");
         assertThat(admin).isNotNull();
         assertThat(admin.getUsername()).isEqualTo("admin");

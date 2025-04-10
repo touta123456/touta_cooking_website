@@ -23,7 +23,6 @@ public class CommentService {
 		this.commentRepository = commentRepository;
 	}
 
-
     @Transactional
     public CommentDTO save(CommentDTO commentDTO) {
     	Comment comment = new Comment();
@@ -52,7 +51,7 @@ public class CommentService {
     		log.warn("Comment having id {} is not linked to any recipe", commentDTO.getId());
     	}
     	
-
+    	// Lets save the comment
         this.commentRepository.save(comment);
         return commentDTO;
     }

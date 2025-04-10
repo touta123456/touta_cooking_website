@@ -18,7 +18,7 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(12); // Force de hachage configurable
+        return new BCryptPasswordEncoder(12); // Configurable hashing strength
     }
     
     @Bean

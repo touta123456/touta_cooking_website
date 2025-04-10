@@ -129,7 +129,7 @@ class ChefControllerTest {
         RecipeDTO otherRecipe = new RecipeDTO();
         otherRecipe.setId(1L);
         UserDTO otherAuthor = new UserDTO();
-        otherAuthor.setId(42L); // différent de fakeChef
+        otherAuthor.setId(42L); // different from fakeChef
         otherRecipe.setAuthor(otherAuthor);
 
         when(recipeService.findById(1L)).thenReturn(Optional.of(otherRecipe));

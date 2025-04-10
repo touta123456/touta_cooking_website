@@ -30,12 +30,12 @@ class JpaCommentRepositoryTest {
 
     @Test
     void shouldFindCommentsByRecipe() {
-        // Création du rôle
+        // Role creation
         Role role = new Role();
         role.setLibelle("ROLE_USER");
         role = roleRepository.save(role);
 
-        // Création de l'utilisateur
+        // User creation
         User user = new User();
         user.setFirstName("Alice");
         user.setLastName("Doe");
@@ -45,21 +45,21 @@ class JpaCommentRepositoryTest {
         user.setRole(role);
         user = userRepository.save(user);
 
-        // Création de la recette
+        // Recipe creation
         Recipe recipe = new Recipe();
         recipe.setTitle("Chocolate Cake");
         recipe.setIngredients("A rich chocolate cake recipe.");
         recipe.setAuthor(user);
         recipe = recipeRepository.save(recipe);
 
-        // Création d'un commentaire lié à cette recette
+        // Comment (linked to the created recipe) creation
         Comment comment = new Comment();
         comment.setContent("Delicious!");
         comment.setRecipe(recipe);
         comment.setUser(user);
         commentRepository.save(comment);
 
-        // Récupération des commentaires
+        // Retrieve comments
         List<Comment> comments = commentRepository.findByRecipe(recipe);
 
         // Assertions
@@ -70,12 +70,12 @@ class JpaCommentRepositoryTest {
 
     @Test
     void shouldReturnEmptyListWhenRecipeHasNoComments() {
-        // Création du rôle
+        // Role creation
         Role role = new Role();
         role.setLibelle("ROLE_USER");
         role = roleRepository.save(role);
 
-        // Création de l'utilisateur
+        // User creation
         User user = new User();
         user.setFirstName("Bob");
         user.setLastName("Smith");
@@ -85,14 +85,14 @@ class JpaCommentRepositoryTest {
         user.setRole(role);
         user = userRepository.save(user);
 
-        // Création d'une recette sans commentaire
+        // Recipe creation
         Recipe recipe = new Recipe();
         recipe.setTitle("Pasta Carbonara");
         recipe.setIngredients("Classic Italian pasta.");
         recipe.setAuthor(user);
         recipe = recipeRepository.save(recipe);
 
-        // Récupération des commentaires
+        // Retrive comment (none ... empty list expected)
         List<Comment> comments = commentRepository.findByRecipe(recipe);
 
         // Assertions

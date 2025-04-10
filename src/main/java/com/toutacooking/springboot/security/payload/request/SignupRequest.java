@@ -3,6 +3,7 @@ package com.toutacooking.springboot.security.payload.request;
 import jakarta.validation.constraints.*;
 
 public class SignupRequest {
+	
 	@NotBlank
 	@Size(min = 3, max = 20)
 	private String username;

@@ -1,6 +1,7 @@
 package com.toutacooking.springboot.security.payload.response;
 
 public class JwtResponse {
+	
 	private String token;
 	private String type = "Bearer";
 	private Long id;
@@ -75,8 +76,6 @@ public class JwtResponse {
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
-
-
 
 	public String getRole() {
 		return role;

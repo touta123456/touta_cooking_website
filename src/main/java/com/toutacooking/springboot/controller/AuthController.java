@@ -113,13 +113,7 @@ public class AuthController {
 		Role userRole = this.roleRepository.findByLibelle(userRoleLibelle);
 		user.setRole(userRole);
 		userRepository.save(user);
-		try {
-			welcomeMailSenderService.sendWelcomeEmail(user.getEmail());
-		}
-		catch (Exception e) {
-			// why not create a dedicated dead letter queue later
-			log.error("Error sending the welcome email to {} due to : {}", user.getEmail(), e.getMessage());
-		}
+		welcomeMailSenderService.sendWelcomeEmail(user.getEmail());
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
 
 	}

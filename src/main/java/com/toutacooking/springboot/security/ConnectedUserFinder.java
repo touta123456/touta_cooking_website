@@ -20,20 +20,20 @@ public class ConnectedUserFinder {
 	}
 	
 	public User findRequestingUser(HttpServletRequest request) {
-		// 1. Récupérer le token JWT depuis le header
+		// 1. Retrieve JWT token in the header
         String authHeader = request.getHeader("Authorization");
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             throw new AccessDeniedException("Missing or invalid Authorization header");
         }
         
-        // 2. Extraire et valider le token
+        // 2. Extract the token
         String jwt = authHeader.substring(7);
         String username = this.jwtUtils.getUserNameFromJwtToken(jwt); // Utilisez votre JwtUtils
         
-        // 3. Charger les détails utilisateur
+        // 3. Retrive the user details
         User user = userService.loadUserByUsername(username);
         
-        // 4. Vérifier la validité du token
+        // 4. Validate the token
         if (!jwtUtils.validateJwtToken(jwt)) {
             throw new AccessDeniedException("Invalid or expired token");
         }

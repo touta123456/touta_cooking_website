@@ -26,12 +26,12 @@ class JpaRecipeRepositoryTest {
 
     @Test
     void shouldFindRecipesByAuthor() {
-        // Création du rôle
+        // Role creation
         Role role = new Role();
         role.setLibelle("ROLE_CHEF");
         role = roleRepository.save(role);
 
-        // Création de l'auteur (user)
+        // Author (a user) creation
         User author = new User();
         author.setFirstName("Gordon");
         author.setLastName("Ramsay");
@@ -41,14 +41,14 @@ class JpaRecipeRepositoryTest {
         author.setRole(role);
         author = userRepository.save(author);
 
-        // Création d'une recette
+        // Recipe creation
         Recipe recipe = new Recipe();
         recipe.setTitle("Beef Wellington");
         recipe.setIngredients("A classic British dish.");
         recipe.setAuthor(author);
         recipeRepository.save(recipe);
 
-        // Appel de la méthode à tester
+        // Retrieve recipes by author
         List<Recipe> recipes = recipeRepository.findByAuthor(author);
 
         // Assertions
@@ -59,12 +59,12 @@ class JpaRecipeRepositoryTest {
 
     @Test
     void shouldReturnEmptyListWhenAuthorHasNoRecipes() {
-        // Création du rôle
+        // Role creation
         Role role = new Role();
         role.setLibelle("ROLE_CHEF");
         role = roleRepository.save(role);
 
-        // Création d'un auteur sans recette
+        // User creation
         User author = new User();
         author.setFirstName("Jamie");
         author.setLastName("Oliver");
@@ -74,7 +74,7 @@ class JpaRecipeRepositoryTest {
         author.setRole(role);
         author = userRepository.save(author);
 
-        // Appel de la méthode à tester
+        // Retrieve recipes by author (none ... empty list expected)
         List<Recipe> recipes = recipeRepository.findByAuthor(author);
 
         // Assertions

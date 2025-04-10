@@ -16,14 +16,14 @@ class JpaRoleRepositoryTest {
 
     @Test
     void shouldSaveAndFindRoleByLibelle() {
-        // Création d'un rôle
+        // Role creation
         Role role = new Role();
         role.setLibelle("ROLE_ADMIN");
 
-        // Sauvegarde en base
+        // Save in database
         roleRepository.save(role);
 
-        // Récupération avec la méthode à tester
+        // Retrieve role
         Role found = roleRepository.findByLibelle("ROLE_ADMIN");
 
         // Assertions
@@ -34,10 +34,10 @@ class JpaRoleRepositoryTest {
 
     @Test
     void shouldReturnNullIfLibelleNotFound() {
-        // On cherche un rôle qui n’existe pas
+        // Lets search a non exeisting role
         Role found = roleRepository.findByLibelle("ROLE_NON_EXISTENT");
 
-        // Vérification que rien n'est retourné
+        // Assert no role has been found
         assertThat(found).isNull();
     }
 }

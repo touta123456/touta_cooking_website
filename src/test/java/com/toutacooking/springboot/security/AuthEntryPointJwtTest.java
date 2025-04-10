@@ -39,7 +39,7 @@ class AuthEntryPointJwtTest {
         when(request.getServletPath()).thenReturn("/api/test");
         when(exception.getMessage()).thenReturn("Authentication failed");
 
-        // Simule un flux de sortie de la réponse
+        // Simulate output stream for the response
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         ServletOutputStream servletOutputStream = new ServletOutputStream() {
             @Override
@@ -49,24 +49,23 @@ class AuthEntryPointJwtTest {
 
             @Override
             public boolean isReady() {
-                return true; // Pour simplifier, toujours prêt
+                return true; // to make it simple, always ready
             }
 
             @Override
             public void setWriteListener(WriteListener writeListener) {
-                // No-op dans ce test
+                // None for the test
             }
         };
 
         when(response.getOutputStream()).thenReturn(servletOutputStream);
 
-        // Appel de la méthode à tester
         authEntryPointJwt.commence(request, response, exception);
 
         verify(response).setContentType("application/json");
         verify(response).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
-        // On vérifie le contenu JSON retourné
+        // Check the JSON content
         ObjectMapper mapper = new ObjectMapper();
         Map<String, Object> jsonResponse = mapper.readValue(byteArrayOutputStream.toByteArray(), Map.class);
 

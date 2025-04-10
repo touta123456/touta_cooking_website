@@ -34,7 +34,6 @@ public class RecipeService {
 		this.commentRepository = commentRepository;
 	}
 
-
     @Transactional
     public RecipeDTO save(RecipeDTO recipeDTO) {
     	Recipe recipe = new Recipe();
@@ -42,6 +41,7 @@ public class RecipeService {
     	recipe.setTitle(recipeDTO.getTitle());
     	recipe.setIngredients(recipeDTO.getIngredients());
     	recipe.setKeywords(recipeDTO.getKeywords());
+    	
     	// Author
     	UserDTO authorDTO = recipeDTO.getAuthor();
     	if(authorDTO!=null) {
@@ -53,7 +53,7 @@ public class RecipeService {
     		log.warn(MISSING_AUTHOR_WARNING, recipeDTO.getId());
     	}
     	
-    	
+    	// Lets save the recipe
         recipeRepository.save(recipe);
         return recipeDTO;
     }
@@ -65,6 +65,7 @@ public class RecipeService {
     	recipe.setTitle(recipeDTO.getTitle());
     	recipe.setIngredients(recipeDTO.getIngredients());
     	recipe.setKeywords(recipeDTO.getKeywords());
+    	
     	// Author
     	UserDTO authorDTO = recipeDTO.getAuthor();
     	if(authorDTO!=null) {
@@ -76,6 +77,7 @@ public class RecipeService {
     		log.warn(MISSING_AUTHOR_WARNING, recipeDTO.getId());
     	}
 
+    	// Lets save the recipe
 		recipeRepository.save(recipe);
 		return recipeDTO;
 	}
@@ -83,7 +85,6 @@ public class RecipeService {
     @Transactional
 	public void delete(Long id) {
 		this.recipeRepository.deleteById(id);
-		
 	}
 
 	public List<RecipeDTO> findAll() {

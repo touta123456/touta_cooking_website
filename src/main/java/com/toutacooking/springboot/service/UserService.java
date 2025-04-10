@@ -31,7 +31,6 @@ public class UserService implements UserDetailsService {
 		this.passwordEncoder = passwordEncoder;
 	}
 
-
     @Transactional
     public UserDTO save(UserDTO userDTO) {
     	User user = new User();
