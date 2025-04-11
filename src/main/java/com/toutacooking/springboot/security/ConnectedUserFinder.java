@@ -28,7 +28,7 @@ public class ConnectedUserFinder {
         
         // 2. Extract the token
         String jwt = authHeader.substring(7);
-        String username = this.jwtUtils.getUserNameFromJwtToken(jwt); // Utilisez votre JwtUtils
+        String username = this.jwtUtils.getUserNameFromJwtToken(jwt);
         
         // 3. Retrive the user details
         User user = userService.loadUserByUsername(username);

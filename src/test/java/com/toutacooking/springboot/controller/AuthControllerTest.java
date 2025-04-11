@@ -3,10 +3,10 @@ package com.toutacooking.springboot.controller;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,11 +28,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.toutacooking.springboot.entity.Role;
 import com.toutacooking.springboot.entity.RoleEnum;
 import com.toutacooking.springboot.entity.User;
-import com.toutacooking.springboot.repository.JpaRoleRepository;
-import com.toutacooking.springboot.repository.JpaUserRepository;
 import com.toutacooking.springboot.security.JwtUtils;
 import com.toutacooking.springboot.security.payload.request.LoginRequest;
 import com.toutacooking.springboot.security.payload.request.SignupRequest;
+import com.toutacooking.springboot.service.RoleService;
 import com.toutacooking.springboot.service.UserService;
 import com.toutacooking.springboot.service.WelcomeMailSenderService;
 
@@ -47,10 +46,10 @@ class AuthControllerTest {
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private JpaUserRepository userRepository;
+    private UserService userService;
 
     @Autowired
-    private JpaRoleRepository roleRepository;
+    private RoleService roleService;
 
     @Autowired
     private PasswordEncoder encoder;
@@ -102,15 +101,15 @@ class AuthControllerTest {
         request.setEmail("new@user.com");
         request.setPassword("PASSWORD123");
 
-        when(userRepository.existsByUsername("newuser")).thenReturn(false);
-        when(userRepository.existsByEmail("new@user.com")).thenReturn(false);
+        when(userService.existsByUsername("newuser")).thenReturn(false);
+        when(userService.existsByEmail("new@user.com")).thenReturn(false);
         when(encoder.encode("PASSWORD123")).thenReturn("encodedpass");
 
         Role mockRole = new Role();
         mockRole.setId(RoleEnum.USER.getId());
         mockRole.setLibelle(RoleEnum.USER.getLibelle());
 
-        when(roleRepository.findByLibelle(RoleEnum.USER.getLibelle()))
+        when(roleService.findByLibelle(RoleEnum.USER.getLibelle()))
                 .thenReturn(mockRole);
 
         mockMvc.perform(post("/api/auth/signup")
@@ -130,7 +129,7 @@ class AuthControllerTest {
         request.setEmail("existing@user.com");
         request.setPassword("TOPPASSWD456");
 
-        when(userRepository.existsByUsername("existing")).thenReturn(true);
+        when(userService.existsByUsername("existing")).thenReturn(true);
 
         mockMvc.perform(post("/api/auth/signup")
                 .with(csrf())
@@ -146,16 +145,6 @@ class AuthControllerTest {
         @Bean
         public AuthenticationManager authenticationManager() {
             return Mockito.mock(AuthenticationManager.class);
-        }
-
-        @Bean
-        public JpaUserRepository userRepository() {
-            return Mockito.mock(JpaUserRepository.class);
-        }
-
-        @Bean
-        public JpaRoleRepository roleRepository() {
-            return Mockito.mock(JpaRoleRepository.class);
         }
 
         @Bean
@@ -176,6 +165,11 @@ class AuthControllerTest {
         @Bean
         public UserService userService() {
             return Mockito.mock(UserService.class);
+        }
+
+        @Bean
+        public RoleService roleService() {
+            return Mockito.mock(RoleService.class);
         }
 
         @Bean

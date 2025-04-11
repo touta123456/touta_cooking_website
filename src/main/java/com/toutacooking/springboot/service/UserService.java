@@ -136,5 +136,13 @@ public class UserService implements UserDetailsService {
 	public User loadUserByUsername(String username) {
 		return this.userRepository.findByUsername(username);
 	}
+
+	public boolean existsByUsername(String username) {
+		return this.userRepository.existsByUsername(username);
+	}
+
+	public boolean existsByEmail(String email) {
+		return this.userRepository.existsByUsername(email);
+	}
     
 }

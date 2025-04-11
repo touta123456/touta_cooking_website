@@ -41,5 +41,9 @@ public class RoleService {
 	    roleDTO.setLibelle(role.getLibelle());
         return roleDTO;
     }
+
+	public Role findByLibelle(String userRoleLibelle) {
+		return this.roleRepository.findByLibelle(userRoleLibelle);
+	}
 	
 }

@@ -17,16 +17,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.toutacooking.springboot.dto.UserDTO;
 import com.toutacooking.springboot.entity.Role;
 import com.toutacooking.springboot.entity.RoleEnum;
 import com.toutacooking.springboot.entity.User;
-import com.toutacooking.springboot.repository.JpaRoleRepository;
-import com.toutacooking.springboot.repository.JpaUserRepository;
 import com.toutacooking.springboot.security.JwtUtils;
 import com.toutacooking.springboot.security.payload.request.LoginRequest;
 import com.toutacooking.springboot.security.payload.request.SignupRequest;
 import com.toutacooking.springboot.security.payload.response.JwtResponse;
 import com.toutacooking.springboot.security.payload.response.MessageResponse;
+import com.toutacooking.springboot.service.RoleService;
+import com.toutacooking.springboot.service.UserService;
 import com.toutacooking.springboot.service.WelcomeMailSenderService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -41,18 +42,18 @@ public class AuthController {
 	private final Logger log = LoggerFactory.getLogger(AuthController.class);
 	
 	private final AuthenticationManager authenticationManager;
-	private final JpaUserRepository userRepository;
-	private final JpaRoleRepository roleRepository;
+	private final UserService userService;
+	private final RoleService roleService;
 	private final PasswordEncoder encoder;
 	private final JwtUtils jwtUtils;
 	private final WelcomeMailSenderService welcomeMailSenderService;
 	
-	public AuthController(AuthenticationManager authenticationManager, JpaUserRepository userRepository,
-			JpaRoleRepository roleRepository, PasswordEncoder encoder, JwtUtils jwtUtils,
+	public AuthController(AuthenticationManager authenticationManager, UserService userService,
+			RoleService roleService, PasswordEncoder encoder, JwtUtils jwtUtils,
 			WelcomeMailSenderService welcomeMailSenderService) {
 		this.authenticationManager = authenticationManager;
-		this.userRepository = userRepository;
-		this.roleRepository = roleRepository;
+		this.userService = userService;
+		this.roleService = roleService;
 		this.encoder = encoder;
 		this.jwtUtils = jwtUtils;
 		this.welcomeMailSenderService = welcomeMailSenderService;
@@ -90,13 +91,13 @@ public class AuthController {
 
 	@PostMapping("/signup")
 	public ResponseEntity<Object> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-		if (userRepository.existsByUsername(signUpRequest.getUsername())) {
+		if (userService.existsByUsername(signUpRequest.getUsername())) {
 			return ResponseEntity
 					.badRequest()
 					.body(Map.of("message", "Error: Username is already taken"));
 		}
 
-		if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+		if (userService.existsByEmail(signUpRequest.getEmail())) {
 			return ResponseEntity
 					.badRequest()
 					.body(Map.of("message", "Error: Email is already in use"));
@@ -110,9 +111,10 @@ public class AuthController {
 				encoder.encode(signUpRequest.getPassword()));
 
 		String userRoleLibelle = RoleEnum.USER.getLibelle();
-		Role userRole = this.roleRepository.findByLibelle(userRoleLibelle);
+		Role userRole = this.roleService.findByLibelle(userRoleLibelle);
 		user.setRole(userRole);
-		userRepository.save(user);
+		UserDTO userDTO = this.userService.mapUserToDTO(user);
+		userService.save(userDTO);
 		welcomeMailSenderService.sendWelcomeEmail(user.getEmail());
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
 
