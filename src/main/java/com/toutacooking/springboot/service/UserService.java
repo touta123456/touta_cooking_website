@@ -92,6 +92,7 @@ public class UserService implements UserDetailsService {
 		
 	}
     
+    @Transactional(readOnly = true)
 	public List<UserDTO> findAll() {
 		List<User> users = this.userRepository.findAll();
 		return users.stream().map(this::mapUserToDTO).toList();
@@ -119,28 +120,33 @@ public class UserService implements UserDetailsService {
         return userDTO;
     }
 
-
+    @Transactional(readOnly = true)
 	public Optional<UserDTO> findById(Long id) {
 		Optional<User> user = this.userRepository.findById(id);
 		return user.map(this::mapUserToDTO);
 	}
 
+    @Transactional(readOnly = true)
 	public Optional<User> findByUserEntityId(Long id) {
 		return this.userRepository.findById(id);
 	}
 	
+    @Transactional(readOnly = true)
 	public User findByEmail(String email) {
 		return this.userRepository.findByEmail(email);
 	}
 	
+    @Transactional(readOnly = true)
 	public User loadUserByUsername(String username) {
 		return this.userRepository.findByUsername(username);
 	}
 
+    @Transactional(readOnly = true)
 	public boolean existsByUsername(String username) {
 		return this.userRepository.existsByUsername(username);
 	}
 
+    @Transactional(readOnly = true)
 	public boolean existsByEmail(String email) {
 		return this.userRepository.existsByUsername(email);
 	}

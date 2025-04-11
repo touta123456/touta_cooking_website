@@ -28,7 +28,7 @@ public class RoleService {
     	return roleRepository.save(roleToSave);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<RoleDTO> findAll() {
 		List<Role> roles = this.roleRepository.findAll();
 		return roles.stream().map(this::mapRoleToDTO).toList();
@@ -42,6 +42,7 @@ public class RoleService {
         return roleDTO;
     }
 
+    @Transactional(readOnly = true)
 	public Role findByLibelle(String userRoleLibelle) {
 		return this.roleRepository.findByLibelle(userRoleLibelle);
 	}

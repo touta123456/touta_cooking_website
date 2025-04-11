@@ -87,6 +87,7 @@ public class RecipeService {
 		this.recipeRepository.deleteById(id);
 	}
 
+    @Transactional(readOnly = true)
 	public List<RecipeDTO> findAll() {
 		List<Recipe> recipes = this.recipeRepository.findAll();
 		return recipes.stream().map(this::mapRecipeToDTO).toList();
@@ -139,11 +140,13 @@ public class RecipeService {
         return recipeDTO;
     }
 
+    @Transactional(readOnly = true)
 	public Optional<RecipeDTO> findById(Long id) {
 		Optional<Recipe> recipe = this.recipeRepository.findById(id);
 		return recipe.map(this::mapRecipeToDTO);
 	}
 
+    @Transactional(readOnly = true)
 	public Optional<RecipeDTO> findByIdWithComments(Long id) {
 	    return this.recipeRepository.findById(id).map(recipe -> {
 	        List<Comment> comments = this.commentRepository.findByRecipe(recipe);
@@ -152,6 +155,7 @@ public class RecipeService {
 	    });	
 	}
 
+    @Transactional(readOnly = true)
 	public List<RecipeDTO> findByAuthor(User author) {
 		List<Recipe> recipes = this.recipeRepository.findByAuthor(author);
 		return recipes.stream().map(this::mapRecipeToDTO).toList();
